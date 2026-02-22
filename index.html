@@ -285,7 +285,6 @@
         ["觸類旁通", "根據對已知事物的認識，進而通達對其他類似事物的認知。", "老師不厭其煩的講解例題，就是要我們能____，舉一反三。"]
       ];
 
-      // ===== 洗牌 =====
       function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -294,37 +293,30 @@
         return array;
       }
 
-      // ===== 產生題目 =====
       function getQuizData() {
         const allIdioms = sourceData.map(item => item[0]);
         const selectedData = shuffle([...sourceData]).slice(0, 20);
-
         return selectedData.map((item, index) => {
           const idiom = item[0];
           const definition = item[1];
           const example = item[2];
-
           const isDefinitionQuestion = Math.random() > 0.5;
           const questionText = isDefinitionQuestion
             ? `成語含義：「${definition}」是指哪個成語？`
             : `請填入正確成語：${example}`;
-
           const otherOptions = allIdioms.filter(opt => opt !== idiom);
           const distractors = shuffle(otherOptions).slice(0, 3);
           const options = shuffle([idiom, ...distractors]);
-
           return { id: index + 1, question: questionText, options, answer: idiom };
         });
       }
 
-      // ===== 302班名單 =====
       const names302 = [
         "李文澯", "湯宸羽", "陳品言", "邱宇睿", "李旻翰", "張宸嘉",
         "林郡騏", "陳謙益", "胡証翔", "王家安", "梁雨禾", "吳予馨",
         "江曼瑜", "劉安喬", "李芸儀", "楊侑曈", "徐子涵", "林妍希"
       ];
 
-      // ===== 遊戲狀態 =====
       let quizData = [];
       let currentScore = 0;
       let answeredStatus = {};
@@ -349,7 +341,6 @@
       function checkClassData() {
         const classVal = document.getElementById('input-class').value;
         const nameContainer = document.getElementById('name-container');
-
         if (classVal === '302') {
           let html = '<label>姓名</label><select id="input-name"><option value="" disabled selected>請選擇姓名</option>';
           names302.forEach(name => { html += `<option value="${name}">${name}</option>`; });
@@ -364,20 +355,16 @@
         const classInput = document.getElementById('input-class');
         const seatInput = document.getElementById('input-seat');
         const nameInput = document.getElementById('input-name');
-
         if (!classInput.value || !seatInput.value || !nameInput.value || nameInput.value.trim() === "") {
           alert("請將班級、座號、姓名都填寫完整喔！");
           return;
         }
-
         userClass = classInput.value;
         userSeat = seatInput.value;
         userName = nameInput.value.trim();
-
         document.getElementById('login-card').classList.add('hidden');
         document.getElementById('quiz-card').classList.remove('hidden');
         document.getElementById('nav-container').classList.remove('hidden');
-
         renderNav();
         document.getElementById('welcome-msg').classList.remove('hidden');
       }
@@ -405,10 +392,8 @@
         document.getElementById('welcome-msg').classList.add('hidden');
         document.getElementById('question-area').classList.remove('hidden');
         document.getElementById('question-text').innerText = questionData.question;
-
         const optionsArea = document.getElementById('options-area');
         optionsArea.innerHTML = '';
-
         if (answeredStatus[index]) {
           const msgDiv = document.createElement('div');
           msgDiv.innerHTML = answeredStatus[index] === 'correct'
@@ -417,7 +402,6 @@
           optionsArea.appendChild(msgDiv);
           return;
         }
-
         questionData.options.forEach(option => {
           const btn = document.createElement('button');
           btn.className = 'option-btn';
@@ -431,7 +415,6 @@
         const allBtns = document.querySelectorAll('.option-btn');
         allBtns.forEach(b => b.disabled = true);
         const navBtn = document.getElementById('nav-' + currentQuestionId);
-
         if (selectedOption === correctOption) {
           btnElement.style.backgroundColor = '#a8e6cf';
           btnElement.style.borderColor = '#6bd1ac';
@@ -475,12 +458,10 @@
         document.getElementById('result-card').classList.remove('hidden');
         document.getElementById('final-score').innerText = currentScore;
 
-        // 格式化時間
         const now = new Date();
         const pad = n => String(n).padStart(2, '0');
         const timeString = `${now.getFullYear()}/${pad(now.getMonth()+1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 
-        // 提交到 Google 表單
         const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScLD8M4t4JykfirzgFfEdG97MgAuGN31Co2Ja98FRpjinf0fg/formResponse';
         const params = new URLSearchParams();
         params.append('entry.1766577672', timeString);
