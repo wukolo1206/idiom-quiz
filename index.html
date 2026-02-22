@@ -175,6 +175,25 @@
       }
 
       .hidden { display: none !important; }
+
+      .submit-btn {
+        background: #88ccc4;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        font-size: 15px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0 3px 0 #6ab5ad;
+        margin-top: 8px;
+        font-family: inherit;
+      }
+
+      .submit-btn:active {
+        transform: translateY(2px);
+        box-shadow: 0 1px 0 #6ab5ad;
+      }
     </style>
   </head>
   <body>
@@ -183,6 +202,9 @@
       <h1>國語成語大挑戰</h1>
       <div class="score-board">得分：<span id="score">0</span> / 100</div>
       <div id="nav-container" class="hidden"></div>
+      <div id="submit-area" class="hidden" style="margin-top:8px;">
+        <button class="submit-btn" onclick="confirmSubmit()">📝 交卷</button>
+      </div>
     </div>
 
     <div id="login-card" class="card">
@@ -367,6 +389,16 @@
         document.getElementById('nav-container').classList.remove('hidden');
         renderNav();
         document.getElementById('welcome-msg').classList.remove('hidden');
+        document.getElementById('submit-area').classList.remove('hidden');
+      }
+
+      function confirmSubmit() {
+        const answered = Object.keys(answeredStatus).length;
+        const unanswered = 20 - answered;
+        const msg = unanswered > 0
+          ? `還有 ${unanswered} 題尚未作答，確定要交卷嗎？`
+          : '所有題目都已作答，確定要交卷嗎？';
+        if (confirm(msg)) showFinalResult();
       }
 
       function renderNav() {
